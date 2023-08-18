@@ -1,4 +1,4 @@
-import { Msg, NatsConnection, NatsError, StringCodec, Subscription, connect } from 'nats';
+import { NatsConnection, StringCodec, Subscription, connect } from 'nats';
 import { config } from '../config';
 
 export const natsServicePublish = async (natsConnection: NatsConnection, message: unknown, producerStreamName: string) => {

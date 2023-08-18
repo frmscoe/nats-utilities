@@ -2,8 +2,8 @@
   "name": "nats-utilities",
   "version": "0.0.1",
   "description": "Node.js (TypeScript) HTTP Service Testing NATS Microservices",
-  "types": "build/server.d.ts",
-  "main": "build/server.js",
+  "types": "build/index.d.ts",
+  "main": "build/index.js",
   "keywords": [
     "frm",
     "nats",
@@ -21,9 +21,9 @@
   },
   "scripts": {
     "build": "tsc --project tsconfig.json",
-    "start": "node -r dotenv/config build/server",
+    "start": "node -r dotenv/config build/index",
     "cleanup": "rm -rf lib coverage jest.config.js.map node_modules package-lock.json",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
     "fix": "npm run fix:prettier && npm run fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
     "fix:prettier": "prettier --write \"**/*.ts\"",
