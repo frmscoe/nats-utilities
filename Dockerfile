@@ -31,7 +31,7 @@ ENV NPM_CONFIG_LOGLEVEL warn
 WORKDIR /home/app
 
 ENV REST_PORT=3000
-ENV FUNCTION_NAME="transaction-monitoring-service-rel-1-0-0"
+ENV FUNCTION_NAME="nats-utilities"
 ENV NODE_ENV="production"
 
 ENV STARTUP_TYPE=nats
@@ -45,6 +45,8 @@ ENV APM_URL=http://apm-server.development:8200
 ENV APM_SECRET_TOKEN=
 
 ENV prefix_logs="false"
+
+EXPOSE 3000
 
 HEALTHCHECK --interval=60s CMD [ -e /tmp/.lock ] || exit 1
 

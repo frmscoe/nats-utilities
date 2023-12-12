@@ -11,6 +11,8 @@ export const natsPublish = async (ctx: Context): Promise<any> => {
     const natsConsumer = request.consumer;
     const functionName = request.functionName;
 
+    loggerService.log(`${String(natsConsumer)} sub - ${String(natsDestination)} pub - ${String(functionName)} Function name`);
+
     let returnMessage;
     let subscription;
     let consumer;
@@ -26,9 +28,12 @@ export const natsPublish = async (ctx: Context): Promise<any> => {
         break;
 
       case 'nats':
+        loggerService.log(`nats communication was triggered`);
         subscription = await natsServiceSubscribe(natsConsumer, functionName);
+        loggerService.log(`Subscription to ${String(natsConsumer)} was done`);
         returnMessage = onMessage(subscription.subscription);
         natsServicePublish(subscription.natsCon, request.message, natsDestination);
+        loggerService.log(`Publish to ${String(natsDestination)} was done`);
         await returnMessage.then((message) => {
           returnMessage = message;
         });

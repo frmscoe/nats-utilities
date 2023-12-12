@@ -1,0 +1,6 @@
+name: 'nats-utilities'
+description: 'Rest at 3000 to nats at subcription'
+author: 'Cebolenkosi Shezi'
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/${{ github.repository }}:latest'

@@ -1,0 +1,61 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Build and Push Docker Image
+on:
+  push:
+    branches: [ "*  " ]
+  pull_request:
+    branches: [ "*" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and Push Docker Image, Nats Server
+    permissions:
+      packages: write
+      contents: read
+    strategy:
+      matrix:
+        node-version: [20]
+        redis-version: [6]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7
+      - name: Setup Node.js (.npmrc)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          registry-url: https://npm.pkg.github.com/
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@frmscoe'
+      - name: Assign GH_TOKEN
+        run: sed -i 's/${GH_TOKEN}/${{ secrets.GH_TOKEN }} /g' .npmrc
+      - name: Turn Off APM LOGGING
+        run: sed -i "s|ENV APM_LOGGING=true|ENV APM_LOGGING=false|g" Dockerfile
+      - name: Change default Port
+        run: sed -i "s|ENV REST_PORT=3000|ENV REST_PORT=3001|g" Dockerfile
+      - name: Change default Port exposed
+        run: sed -i "s|EXPOSE 3000|EXPOSE 3001|g" Dockerfile
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+            registry: ghcr.io
+            username: ${{ github.repository_owner }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+
+
