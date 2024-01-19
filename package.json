@@ -37,7 +37,7 @@
     "test:integration": "npm run test ./src --detectOpenHandles"
   },
   "dependencies": {
-    "@frmscoe/frms-coe-lib": "^2.0.3",
+    "@frmscoe/frms-coe-lib": "^2.2.4",
     "@frmscoe/frms-coe-startup-lib": "^2.1.0",
     "@types/axios": "^0.14.0",
     "@types/koa": "^2.13.6",
